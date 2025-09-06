@@ -19,10 +19,9 @@ public class StudentService {
       return studentRepository.findAll();
   }
 
-  public boolean addNewStudents(StudentEntity studentEntity)
+  public void addNewStudents(StudentEntity studentEntity)
   {
       studentRepository.save(studentEntity);
-      return true;
   }
 
   public Optional<StudentEntity> getStudentById(Integer studentId)
