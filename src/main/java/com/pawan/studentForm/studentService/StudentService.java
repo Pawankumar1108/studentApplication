@@ -29,4 +29,9 @@ public class StudentService {
   {
      return studentRepository.findById(studentId);
   }
+
+    public Optional<StudentEntity> updateStudentDetails(Integer studentId)
+    {
+        return studentRepository.findById(studentId);
+    }
 }

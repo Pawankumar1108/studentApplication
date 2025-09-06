@@ -1,8 +1,6 @@
 package com.pawan.studentForm.controller;
 
 import com.pawan.studentForm.entity.StudentEntity;
-import com.pawan.studentForm.studentRepository.StudentDemo;
-import com.pawan.studentForm.studentRepository.StudentRepository;
 import com.pawan.studentForm.studentService.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,34 +14,37 @@ public class StudentEntryController {
     @Autowired
     StudentService studentService;
 
-    @Autowired
-    StudentRepository studentRepository;
+//    @Autowired
+//    StudentRepository studentRepository;
 
     //private Map<Integer,StudentEntity> studentDetails = new HashMap<>();
 
     @GetMapping("/getAllStudents")
     public List<StudentEntity> getAllStudents ()
     {
-        return studentRepository.findAll();
+        return studentService.getAllStudent();
     }
 
     @PostMapping("/addNewStudent")
     public boolean addNewStudent (@RequestBody StudentEntity newStudent)
     {
-        studentRepository.save(newStudent); // Instead of creating extra class for Implementing Bussiness logic we can use it directly..
+        studentService.addNewStudents(newStudent);
         return true;
     }
 
     @GetMapping("/getStudentById/{studentId}")
-    public Optional<StudentEntity> getStudentById (@PathVariable Integer studentId)
+    public boolean getStudentById (@PathVariable Integer studentId)
     {
-        return studentService.getStudentById(studentId);
+        Optional<StudentEntity> getStatus = (studentId != null) ? studentService.getStudentById(studentId) : Optional.empty();
+        return true;
     }
 
     @PutMapping("/updateStudentById/{studentId}")
-    public StudentEntity updateStudentById (@PathVariable Integer studentId)
+    public boolean updateStudentDetailsById (@PathVariable Integer studentId,
+                                      @RequestBody StudentEntity studentEntity)
     {
-        return null ;
+        Optional<StudentEntity> getStatus = (studentId != null) ? studentService.updateStudentDetails(studentId) : Optional.empty();
+        return true ;
     }
 
     /*@DeleteMapping("/removeStudentById/{studentId}")
