@@ -11,12 +11,12 @@ import java.util.Optional;
 @Service
 public class StudentService {
 
-    @Autowired
-    StudentRepository studentRepository;
+ @Autowired
+ private StudentRepository studentRepository;
 
   public List<StudentEntity> getAllStudent()
   {
-      return studentRepository.findAll();
+       return studentRepository.findAll();
   }
 
   public void addNewStudents(StudentEntity studentEntity)
@@ -26,11 +26,15 @@ public class StudentService {
 
   public Optional<StudentEntity> getStudentById(Integer studentId)
   {
+
      return studentRepository.findById(studentId);
+//      Optional<StudentEntity> studentEntity = studentId != null ? studentRepository.findById(studentId) : Optional.empty();
+//      return studentEntity;
   }
 
-    public Optional<StudentEntity> updateStudentDetails(Integer studentId)
+    public void updateStudentDetails(Integer studentId,StudentEntity studentEntity)
     {
-        return studentRepository.findById(studentId);
+        if (studentId != null && studentId.equals(studentEntity.getStudentId()))
+            studentRepository.save(studentEntity);
     }
 }

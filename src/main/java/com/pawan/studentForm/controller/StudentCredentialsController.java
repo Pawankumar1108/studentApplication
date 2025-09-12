@@ -1,10 +1,12 @@
 package com.pawan.studentForm.controller;
 
 import com.pawan.studentForm.entity.StudentCredentialsEntity;
-import com.pawan.studentForm.entity.StudentEntity;
 import com.pawan.studentForm.studentRepository.StudentCredentialsRepository;
 import com.pawan.studentForm.studentService.StudentCredentialsServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,24 +36,23 @@ public class StudentCredentialsController {
     }
 
     @GetMapping("/getStudentById/{credentialsId}")
-    public boolean getStudentById (@PathVariable Integer credentialsId)
+    public Optional<StudentCredentialsEntity> getStudentById (@PathVariable Integer credentialsId)
     {
-        Optional<StudentCredentialsEntity> checkId = (credentialsId != null) ? studentCredentialsServices.getStudentById(credentialsId) : Optional.empty();
-        return true;
+        return (credentialsId != null) ? studentCredentialsServices.getStudentById(credentialsId) : Optional.empty();
     }
 
     @PutMapping("/updateStudentByUserName")
-    public boolean updateStudentDetailsByUserName (@RequestBody StudentCredentialsEntity newStudentCredentials)
+    public ResponseEntity<?> updateStudentDetailsByUserName (@PathVariable String userName, @RequestBody StudentCredentialsEntity newStudentCredentials)
     {
-        StudentCredentialsEntity userName = studentCredentialsServices.getStudentByUserName(newStudentCredentials.getUserName());
+        StudentCredentialsEntity user = studentCredentialsServices.getStudentByUserName(userName);
         if(userName!=null)
         {
-            userName.setUserName(newStudentCredentials.getUserName());
-            userName.setPassword(newStudentCredentials.getPassword());
-            studentCredentialsServices.addNewStudentCredential(userName);
+            user.setUserName(newStudentCredentials.getUserName());
+            user.setPassword(newStudentCredentials.getPassword());
+            studentCredentialsServices.addNewStudentCredential(user);
         }
 
-       return true ;
+       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
 }
