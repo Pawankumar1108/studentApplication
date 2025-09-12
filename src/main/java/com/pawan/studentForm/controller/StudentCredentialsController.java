@@ -4,7 +4,6 @@ import com.pawan.studentForm.entity.StudentCredentialsEntity;
 import com.pawan.studentForm.studentRepository.StudentCredentialsRepository;
 import com.pawan.studentForm.studentService.StudentCredentialsServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

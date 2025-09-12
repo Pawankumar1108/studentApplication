@@ -1,6 +1,8 @@
 package com.pawan.studentForm.controller;
 
+import com.pawan.studentForm.entity.StudentCredentialsEntity;
 import com.pawan.studentForm.entity.StudentEntity;
+import com.pawan.studentForm.studentService.StudentCredentialsServices;
 import com.pawan.studentForm.studentService.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,13 @@ import java.util.*;
 public class StudentEntryController {
 
     @Autowired
+    private StudentCredentialsServices studentCredentialsServices;
+
+    @Autowired
     private StudentService studentService;
 
     @GetMapping("/getAllStudents")
-    public ResponseEntity<?> getAllStudents ()
+    public ResponseEntity<?> getAllStudents()
     {
         List<StudentEntity> getAllStudentList = studentService.getAllStudent();
               return getAllStudentList != null && !getAllStudentList.isEmpty()
@@ -31,12 +36,38 @@ public class StudentEntryController {
 //        }
     }
 
-    @PostMapping("/addNewStudent")
-    public ResponseEntity<StudentEntity> addNewStudent (@RequestBody StudentEntity newStudent)
+//Getting Student By their Credentials.
+
+    @GetMapping("/getAllStudentsByStudentName")
+    public ResponseEntity<?> getAllStudentsByStudentName (@PathVariable String studentName)
+    {
+        StudentCredentialsEntity studentEntry = studentCredentialsServices.getStudentByUserName(studentName);
+        List<StudentEntity> getAllStudentList = studentEntry.getStudentList();
+        return getAllStudentList != null && !getAllStudentList.isEmpty()
+                ? new ResponseEntity<>(getAllStudentList, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+//    @PostMapping("/addNewStudent")
+//    public ResponseEntity<StudentEntity> addNewStudent (@RequestBody StudentEntity newStudent)
+//    {
+//        try
+//        {
+//            studentService.addNewStudents(newStudent, studentName);
+//            return new ResponseEntity<>(newStudent,HttpStatus.CREATED);
+//        }catch (Exception ex)
+//        {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+//Add Student According to StudentNames.
+    @PostMapping("/addNewStudent/{studentName}")
+    public ResponseEntity<StudentEntity> addStudentByStudentName (@RequestBody StudentEntity newStudent,@PathVariable String studentName)
     {
         try
         {
-            studentService.addNewStudents(newStudent);
+            studentService.addNewStudents(newStudent,studentName);
             return new ResponseEntity<>(newStudent,HttpStatus.CREATED);
         }catch (Exception ex)
         {
